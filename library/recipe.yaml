@@ -1,0 +1,10 @@
+---
+basemodel: resnet50
+basemodel_weights: IMAGENET1K_V2
+basemodel_weightstring: "ResNet50_Weights.IMAGENET1K_V2"
+base_transform: True
+basemodel_debug: True
+basemodel_train: False
+base_layercrop: True
+base_lcnum: 3 #The number of last layer that should be deleated
+...

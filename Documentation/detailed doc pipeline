@@ -1,0 +1,49 @@
+SEARCH TOC FOR CHANGE
+Pipeline contains Class Pipeline
+The class inherits torch Dataset
+
+
+
+__init__()
+
+-- input data_cnf_path : path to data config file from config folder
+   configs/data_config.INI
+--CreateDirectory() : class is initilaized and called creating run experiment
+   for each trial run. The folders will be numbered
+
+The method initializes all the class variables by reading from .INI file
+
+__call__()
+
+--initialize get_data_to_pipe(..) class from pipeline_help module.
+
+-- get_data_to_pipeline.do() will return
+	-- dict_cord_units : contains lsit of cordinates as values to corresponding aspect keys
+	-- config_save_dict : contains info about number of classes etc
+	-- data_save_dict : Contains info image_paths, annotated text, manipulated annotations etc
+
+-- self.collect_image_gridcrds()
+This is a method in pipeline_help class,
+        Check grid size and recursive grids, if recursive grids? Then make grids from 1 to grid size and save them in grid_list.
+        Create a grid_dictionary with grid_list values as key
+        -- grid_iterate(grid) function for values
+
+
+-- self.get_output_arrangements()
+-- self.pipeline_txt()
+
+-- collect_single(annotation) : will collect the anchor box for classes bounding box
+	which has the greatest IOU
+
+
+METHODS
+-------
+
+-- display_singledict() : display the single annotated image from single cord dictionary
+	collected from method collect_single()
+
+-- collect_single() : collects anchor box coordinates for each class of an image
+
+-- IOU_cords() : returns IOU score of two coordinates.
+
+

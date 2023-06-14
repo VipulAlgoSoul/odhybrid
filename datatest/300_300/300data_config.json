@@ -1,0 +1,24 @@
+{
+    "train directory": "E:\\YOLOv10\\YOLOv10\\data\\train",
+    "image shape": [
+        300,
+        300
+    ],
+    "class map": {
+        "0": "cycle\n",
+        "1": "human\n"
+    },
+    "class counts": {
+        "cycle\n": 1,
+        "human\n": 0
+    },
+    "grids": 6,
+    "per grid": 1,
+    "number output channels": 1,
+    "per out channel length without class multiplication": 36,
+    "Target Shape": [
+        1,
+        252,
+        1
+    ]
+}
