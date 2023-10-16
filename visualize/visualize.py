@@ -1,6 +1,20 @@
 import matplotlib.pyplot as plt
 import torch
+from prettytable import PrettyTable
+from torchviz import make_dot
 
+
+def count_parameters(model):
+    table = PrettyTable(["Modules", "Parameters"])
+    total_params = 0
+    for name, parameter in model.named_parameters():
+        if not parameter.requires_grad: continue
+        param = parameter.numel()
+        table.add_row([name, param])
+        total_params+=param
+    print(table)
+    print(f"Total Trainable Params: {total_params}")
+    return total_params
 
 def visualize_data(train_dataloader, id=0):
     # Display image and label.
@@ -25,3 +39,8 @@ def visualize_asarray(traindata):
         plt.imshow(img.permute(1, 2, 0))
         plt.show(block=True)
         # print(f"Label: {label}")
+
+def save_model_architecture(model,op,save_path, save_flag=True):
+    if save_flag:
+        make_dot(op, params=dict(list(model.named_parameters())), show_saved=True). \
+            render(save_path, format="png")

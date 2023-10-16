@@ -3,7 +3,6 @@ from torchvision.io import read_image
 import torch.nn as nn
 from torchsummary import summary
 
-
 class LoadModel():
     '''This function allows to load base model'''
     def __init__(self, yaml_dict):
@@ -22,12 +21,14 @@ class LoadModel():
         batch = preprocess(img).unsqueeze(0)
 
         # Step 4: Use the model and print the predicted category
-        print(self.base_model(batch).shape,">>>>>>>>>>>")
-        prediction = self.base_model(batch).squeeze(0).softmax(0)
+        pred = self.base_model(batch)
+        print(pred.shape,">>>>>>>>>>>")
+        prediction = pred.squeeze(0).softmax(0)
         class_id = prediction.argmax().item()
         score = prediction[class_id].item()
         category_name = self.base_weights.meta["categories"][class_id]
         print(f"{category_name}: {100 * score:.1f}%")
+        return pred
 
     def loadbasemodel(self):
         # Option 1: passing weights param as string
@@ -43,20 +44,25 @@ class LoadModel():
 
 
         self.base_weights = torch.hub.load("pytorch/vision", "get_weight", self.yaml_cnf['basemodel_weightstring'])
-        base_model = torch.hub.load("pytorch/vision", self.yaml_cnf['basemodel'], weights=self.base_weights)
+        self.base_model = torch.hub.load("pytorch/vision", self.yaml_cnf['basemodel'], weights=self.base_weights)
 
+        model_list = []
         if not self.yaml_cnf['basemodel_train']:
-            for param in base_model.parameters():
+            num_layers =4
+            count=0
+            for param in self.base_model.parameters():
                 param.requires_grad = False
 
         # self.base_model.fc=nn.Identity()
         # print(model.classifier)
-        print("The number of childrens for basemodel is",len(list(base_model.children())),"**"*20, list(base_model.children()))
-        self.base_model = torch.nn.Sequential(*(list(base_model.children())[:-1]))
+        print("The number of childrens for basemodel is",len(list(self.base_model.children())),"**"*20, list(self.base_model.children()))
+        new_model = nn.Sequential(*list(self.base_model.children())[0:-4])
+        print("The number of childrens for newmodel is",len(list(new_model.children())),"**"*20, list(new_model.children()))
 
 
 
-        if self.yaml_cnf['basemodel_debug']:
-            print("The base model is ", self.base_model)
-            # print("\nThe model summary is","__"*20)
-            # summary(self.base_model)
+
+        # if self.yaml_cnf['basemodel_debug']:
+        #     print("The base model is ", self.base_model)
+        return self.base_model, new_model
+

@@ -28,7 +28,7 @@ t = Pipeline("D:\Detection_Classification/runs","D:\Detection_Classification\dat
 222 >> Data Augmentation
 333 >> Train Test Split
 
-    1) Loading VGG model pytorch
+    1) Loading VGG model pytorch ~
     2) Create a model repo
     3) Netron map visualizing model
     4) Cropping model

@@ -1,4 +1,4 @@
-pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
+ypip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
 pip3 install opencv-python
 pip3 install pandas
 pip3 install scikit-image
