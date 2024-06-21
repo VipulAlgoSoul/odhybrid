@@ -1,0 +1,10 @@
+---
+basemodel:vgg11
+basemodel_weights: IMAGENET1K_V2
+basemodel_weightstring: ""
+base_transform: True
+basemodel_debug: True
+basemodel_train: False
+base_layercrop: True
+base_lcnum: 2 #The number of last layer that should be deleated
+...

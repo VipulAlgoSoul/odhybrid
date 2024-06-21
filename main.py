@@ -41,7 +41,7 @@ def create_data_dict(data_path, name_fl, np_path):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    data_cnf_path = "E:\YOLOv10\YOLOv10\configs\data_config.INI"
+    data_cnf_path = "E:\odhybrid\configs\data_config.INI"
     init_confg = GetConfig(data_cnf_path)
     init_config = init_confg()
 

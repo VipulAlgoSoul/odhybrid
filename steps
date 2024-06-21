@@ -28,12 +28,16 @@ t = Pipeline("D:\Detection_Classification/runs","D:\Detection_Classification\dat
 222 >> Data Augmentation
 333 >> Train Test Split
 
-    1) Loading VGG model pytorch ~
-    2) Create a model repo
-    3) Netron map visualizing model
-    4) Cropping model
+
+---------------------------------------------------------------
+    1) Loading Resnet model pytorch
+    2) Create a model repo  !
+    3) Netron map visualizing model (D)
+    4) Cropping model (D)
     5) Adding layers
     6) Calculating the trainable parameters
     7) Visualizing feature map
     8) Weights and biases addition
     9) FPN, Bottleneck etc
+
+----------------------------------------------------------------
