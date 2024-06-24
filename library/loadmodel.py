@@ -6,6 +6,40 @@ from configs.getconfig import GetConfig
 from .utils import *
 import ast
 import os
+import torch
+import torch.nn as nn
+from functools import reduce
+
+class Mylayer(nn.Module):
+    def __init__(self, premodel):
+        super(Mylayer, self).__init__()
+        self.premodel= premodel
+        # self.my_new_layers = nn.Sequential(nn.Flatten(),nn.Linear(204800, 100),nn.Linear(204800, 100),nn.Linear(204800, 100),
+        #                                    nn.ReLU(),
+        #                                    nn.Linear(100, 2))
+
+        self.my_new_layers = nn.Sequential(nn.Conv2d(in_channels=2048,out_channels=512,
+                                                     kernel_size=3,stride=1,padding=1),
+                                           nn.ReLU(),
+
+                                           nn.Conv2d(in_channels=512, out_channels=64,
+                                                     kernel_size=1, stride=1, padding=1),
+                                           nn.ReLU(),
+
+                                           nn.ReLU(),
+                                           nn.Conv2d(in_channels=64, out_channels=10,
+                                                     kernel_size=3, stride=1, padding=1),
+                                           nn.ReLU(),
+                                           nn.Flatten(),
+                                           nn.Linear(1440, 875),
+                                           nn.ReLU())      # Padding to maintain the input size)
+
+
+    def forward(self, x):
+        x = self.premodel(x)
+        x = self.my_new_layers(x)
+        return x
+
 
 class LoadModel():
     '''This function allows to load base model'''
@@ -32,6 +66,10 @@ class LoadModel():
 
         self.output_shape = (1, 2*self.per_grid-1, self.grids*self.grids*(4+self.num_classes+1),1)
 
+    def pytorch_count_params(self,model):
+        "count number trainable parameters in a pytorch model"
+        total_params = sum(reduce(lambda a, b: a * b, x.size()) for x in model.parameters())
+        return total_params
 
     def test_on_single_(self, img, model):
 
@@ -109,6 +147,9 @@ class LoadModel():
         else:
             self.base_model=base_model
 
+        for i, param in enumerate(self.base_model.parameters()):
+            param.requires_grad = False
+
         # if self.yaml_cnf['basemodel_debug']:
         #     print("The base model is ", self.base_model)
         #     # print("\nThe model summary is","__"*20)
@@ -129,7 +170,15 @@ class LoadModel():
         model_out_shape = self.test_on_single_(torch_input, self.base_model)
         print(model_out_shape,">>>>>>>>>>>>>>>>")
 
-        return self.base_model
+        #Getting number of parameters of the model
+        #Fusing layers to CNN
+        #one by one convolution to reduce+ alternate upsamplingh
+        ext_mdl = Mylayer(self.base_model)
+        print("The number of parameters is ",self.pytorch_count_params(ext_mdl))
+        pytorch_total_params = sum(p.numel() for p in ext_mdl.parameters() if p.requires_grad)
+        print("The number of trainable parameters : ", pytorch_total_params)
+
+        return ext_mdl
 
 
 
